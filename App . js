@@ -1,0 +1,127 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+
+const App = () => {
+  const [packages, setPackages] = useState([]);
+  const [newPackage, setNewPackage] = useState('');
+  const [residentName, setResidentName] = useState('');
+  const [apartmentNumber, setApartmentNumber] = useState('');
+  const [block, setBlock] = useState('');
+
+  const addPackage = () => {
+    if (newPackage && residentName && apartmentNumber && block) {
+      setPackages([...packages, { id: Date.now(), package: newPackage, resident: residentName, apartment: apartmentNumber, block }]);
+      setNewPackage('');
+      setResidentName('');
+      setApartmentNumber('');
+      setBlock('');
+    } else {
+      Alert.alert('Erro', 'Preencha todos os campos!');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Gestão de Encomendas</Text>
+
+      {/* Registro de Encomendas */}
+      <Text style={styles.sectionTitle}>Registrar Encomenda</Text>
+      <TextInput
+        style={styles.input}
+        value={newPackage}
+        onChangeText={setNewPackage}
+        placeholder="Descrição da encomenda"
+        placeholderTextColor="#999"
+      />
+      <TextInput
+        style={styles.input}
+        value={residentName}
+        onChangeText={setResidentName}
+        placeholder="Nome do morador"
+        placeholderTextColor="#999"
+      />
+      <TextInput
+        style={styles.input}
+        value={apartmentNumber}
+        onChangeText={setApartmentNumber}
+        placeholder="Número do apartamento"
+        placeholderTextColor="#999"
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        value={block}
+        onChangeText={setBlock}
+        placeholder="Bloco"
+        placeholderTextColor="#999"
+      />
+      <TouchableOpacity style={styles.button} onPress={addPackage}>
+        <Text style={styles.buttonText}>Registrar Encomenda</Text>
+      </TouchableOpacity>
+
+      {/* Lista de Encomendas */}
+      <Text style={styles.sectionTitle}>Encomendas Recebidas</Text>
+      <FlatList
+        data={packages}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <Text style={styles.listItem}>
+            Morador: {item.resident}, Apartamento: {item.apartment}, Bloco: {item.block} - Encomenda: {item.package}
+          </Text>
+        )}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f0f4f8',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#1e88e5',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    color: '#0d47a1',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#bbb',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+  },
+  button: {
+    backgroundColor: '#1e88e5',
+    padding: 15,
+    borderRadius: 8,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  listItem: {
+    fontSize: 16,
+    padding: 10,
+    backgroundColor: '#fff',
+    marginVertical: 5,
+    borderRadius: 8,
+    borderColor: '#0d47a1',
+    borderWidth: 1,
+  },
+});
+
+export default App;
